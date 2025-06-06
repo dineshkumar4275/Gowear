@@ -1,0 +1,2199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ 
+  
+  <title>GOWEAR - Online Shopping</title>
+
+   <style>
+   
+    body {
+      overflow-x: hidden;
+      font-family: Arial, sans-serif;
+      background-color: black;
+      margin: 0;
+      padding: 0;
+      
+    }
+ .cart-summary {
+      padding: 15px;
+      border-top: 2px solid #444;
+      margin-top: 20px;
+      color: white;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
+    }
+
+    .total-row {
+      border-top: 1px solid #666;
+      padding-top: 12px;
+      font-weight: bold;
+    }
+
+    .total-amount {
+      color: #f03d4e;
+    }
+
+
+
+.cart-total {
+  text-align: right;
+  padding: 15px;
+  font-size: 1.2em;
+  color: white;
+  border-top: 2px solid #444;
+  margin-top: 20px;
+}
+
+.cart-total h3 {
+  margin: 0;
+  color: #f03d4e;
+}
+    
+
+
+    .cart-icon {
+      position: fixed;
+ 
+      right: 20px;
+      font-size: 24px;
+     
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -8px;
+      right: -10px;
+      background: red;
+      color: white;
+      font-weight: bold;
+      padding: 3px 6px;
+      border-radius: 50%;
+      font-size: 12px;
+    }
+
+    /* Sidebar */
+    .cart-sidebar {
+      width: 300px;
+      background-color: #1f1f1f;
+      color: white;
+      padding: 20px;
+      position: fixed;
+      right: -300px;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      box-shadow: -2px 0 10px rgba(0,0,0,0.5);
+      transition: right 0.3s ease;
+      z-index: 1000;
+    }
+
+    .cart-sidebar.active {
+      right: 0;
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #444;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    .cart-header h2 {
+      margin: 0;
+    }
+
+    .close-cart {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .cart-item {
+      display: flex;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #333;
+    }
+
+    .cart-item img {
+      width: 60px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+
+    .item-details {
+      flex: 1;
+    }
+
+    .item-name {
+      font-weight: bold;
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .item-price {
+      color: #ddd;
+      margin: 5px 0;
+      font-size: 14px;
+    }
+
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 5px;
+    }
+
+    .quantity-control button {
+      width: 25px;
+      height: 25px;
+      border: none;
+      background-color: #333;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quantity-control input {
+      width: 30px;
+      height: 25px;
+      text-align: center;
+      border: none;
+      background-color: #555;
+      color: white;
+      border-radius: 3px;
+    }
+
+    .no-items {
+      color: #aaa;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    /* Navigation */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      background-color: black;
+      padding: 10px 40px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      
+      
+    }
+
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+     
+    }
+
+    #logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      margin-left: 20px;
+    }
+
+    .search-bar {
+      flex: 1;
+      max-width: 700px;
+      display: flex;
+    }
+
+    .search-bar input[type="text"] {
+      width: 100%;
+      height: 30px;
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px 0 0 4px;
+      background-color: #404040;
+      color: white;
+    }
+
+    .search-bar button {
+      height: 30px;
+      border: 1px solid #ccc;
+      background-color: #404040;
+      border-left: none;
+      padding: 0 10px;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+      font-size: medium;
+      font-weight: bolder;
+      color: white;
+    }
+
+    .search-bar button:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: white;
+      font-weight: 100;
+    }
+
+    .icon-section {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      color: white;
+      margin-right: 50px;
+      margin-top: 10px;
+      
+    }
+i{
+   color: rgb(166, 1, 237); ;
+}
+    .icon-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 25px;
+    
+      
+    }
+
+    .head {
+      display: flex;
+      align-items: center;
+      padding: 15px 70px;
+      background-color: black;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 60px;
+      z-index: 999;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      height: max-content;
+    }
+
+    .head a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      padding: 8px 10px;
+      transition: color 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .head a:hover {
+      color: #f03d4e;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline;
+    }
+
+    .dropdown-content {
+   
+      position: absolute;
+      top: 45px;
+      left: 0;
+      background-color: #fff;
+      padding: 20px;
+      width: 450px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      z-index: 1000;
+      flex-direction: column;
+      gap: 30px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+      flex-wrap: wrap;
+      display: flex;
+    }
+
+    .dropdown:hover .dropdown-content {
+     
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .column {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .column h4 {
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: black;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+    }
+
+    .column a {
+      display: block;
+      color: #333;
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .column a:hover {
+      color: #f03d4e;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .banner-container {
+      position: relative;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .banner-container img {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+    }
+
+    #go {
+      position: absolute;
+      bottom: 150px;
+      right: 20px;
+      width: 100px;
+      height: 40px;
+      box-shadow: #f03d4e 1px 1px 1px;
+      animation: bounce 0.3s infinite alternate;
+      background-color: #f03d4e;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+    }
+
+    #but {
+      background-color: red;
+      width: 200px;
+      height: 40px;
+      border-radius: 5px;
+      color: white;
+      border: none;
+      font-size: 15px;
+      font-weight: bold;
+      box-shadow: #f03d4e 1px 1px 1px;
+      animation: bounce 0.3s infinite alternate;
+      margin: 20px auto;
+      display: block;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    @keyframes bounce {
+      to {
+        transform: scale(1.05);
+      }
+    }
+
+    .product-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 20px;
+      justify-content: center;
+    }
+
+    .product-card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      width: 250px;
+      height: 350px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-color: white;
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-card img {
+      height: 220px;
+      object-fit: cover;
+      width: 100%;
+      border-radius: 5px;
+    }
+
+    .rating {
+      color: gold;
+      font-size: 14px;
+      margin: 5px 0;
+    }
+
+    .product-card button {
+      background-color: black;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .product-card button:hover {
+      background-color: #404040;
+    }
+
+    footer {
+      background-color: black;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      width: 100%;
+    }
+
+    #pro {
+      margin-left: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+    }
+
+    .section-title {
+      background-color: #333;
+      padding: 10px;
+      margin-top: 20px;
+    }
+.hamburger {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: white;
+  position: fixed;
+  left: 20px;
+top: 25px;
+  transform: translateY(-50%);
+  z-index: 1001;
+  margin: 0;
+  padding: 0;
+}
+
+.whatsapp-float {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background-color: #25D366;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  display: none; /* Hidden by default */
+}
+
+body:not(.cart-page):not(.checkout-page) .whatsapp-float {
+  display: flex; /* Show only on non-cart/checkout pages */
+}
+
+.whatsapp-float:hover {
+  background-color: #128C7E;
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.whatsapp-float i {
+  font-size: 30px;
+}
+
+.whatsapp-float span {
+  display: none;
+}
+.top-info {
+  display: flex;
+  justify-content: space-around;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #444;
+  text-align: center;
+  color: #ccc;
+}
+
+.top-info div {
+  max-width: 250px;
+}
+
+.top-info i {
+  font-size: 20px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.footer-main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.footer-col {
+  flex: 1 1 180px;
+  margin: 10px;
+}
+
+.footer-col h4 {
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-col ul li {
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.brand h2 {
+  font-size: 24px;
+  color: #fff;
+}
+
+.brand p {
+  margin: 15px 0;
+  max-width: 300px;
+}
+
+.social-icons i {
+  font-size: 18px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  border-top: 1px solid #444;
+  padding-top: 15px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.payment-icons img {
+  width: 40px;
+  height: 40px;
+
+
+  
+
+}
+.payment-icons{
+display: flex;
+flex-wrap: wrap;
+gap: 10px 20px;
+}
+
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+    
+  
+  }
+  .product-card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      width: 150px;
+      height: 250px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-color: white;
+      transition: transform 0.3s ease;
+    }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background-color: black;
+    padding: 10px 0;
+    text-align: center;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .icon-section {
+    margin-top: 10px;
+  }
+}
+.whatsapp-float {
+    width: auto;
+    height: auto;
+    padding: 12px 20px;
+    border-radius: 50px;
+  }
+  
+  .whatsapp-float i {
+    margin-right: 8px;
+    font-size: 24px;
+  }
+  
+  .whatsapp-float span {
+    display: inline;
+    font-weight: 500;
+  }
+
+
+
+
+  @media (max-width: 480px) {
+  .product-card {
+    width: 90%;
+    height: auto; /* Let height adjust based on content */
+    padding: 15px;
+    box-sizing: border-box;
+  }
+
+  .product-card img {
+    height: 180px; /* Smaller but proportional */
+    width: 100%;
+    border-radius: 5px;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+
+  .rating {
+    font-size: 16px; /* Slightly bigger for touch */
+    margin: 8px 0;
+    color: gold;
+  }
+
+  .item-price, 
+  .product-card .item-price {
+    font-size: 18px; /* Bigger price */
+    font-weight: bold;
+    color: #f03d4e;
+    margin: 8px 0;
+  }
+
+  .product-card button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background-color: black;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
+    font-weight: bold;
+  }
+
+  .product-card button:hover {
+    background-color: #404040;
+  }
+}
+@media (max-width: 768px) {
+  /* Show hamburger */
+  .hamburger {
+    display: block;
+  }
+
+  /* Hide regular navigation */
+  .nav-links {
+    display: none;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background-color: black;
+    padding: 15px 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    z-index: 1000;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+  }
+
+  /* Show navigation when active */
+  .nav-links.active {
+    display: flex;
+    animation: slideDown 0.3s ease-out;
+  }
+
+  /* Header adjustments */
+  .head {
+    padding: 10px 15px;
+    top: 50px;
+    justify-content: space-around;
+  }
+
+  .head a {
+    font-size: 14px;
+    padding: 5px 8px;
+  }
+
+  /* Product cards */
+  .product-card {
+    width: 160px;
+    height: 250px;
+  }
+
+  .product-card img {
+    height: 140px;
+  }
+
+  /* Search bar */
+  .search-bar {
+    max-width: 200px;
+  }
+ 
+
+/* Mini Phones (under 400px) */
+@media (max-width: 400px) {
+  .hamburger {
+    font-size: 24px;
+    left: 10px;
+    top: 10px;
+  }
+
+  .nav-links {
+    top: 50px;
+    padding: 10px 0;
+    gap: 10px;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+  }
+
+  .product-card {
+    width: 140px;
+    height: 220px;
+  }
+
+  .product-card img {
+    height: 120px;
+  }
+}
+
+/* Animation for menu */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+  </style>
+ 
+</head>
+<body>
+  <nav>
+ <div class="nav-container">
+  <div id="logo">GOWEAR</div>
+
+  <!-- Hamburger icon (visible on small screens) -->
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+
+  <div class="search-bar">
+    <input type="text" placeholder="Search for products...">
+    <button>Search</button>
+  </div>
+
+  <div class="nav-links" id="mobileMenu">
+  
+    <a href="index.html">Home</a>
+    <a href="#silk-sarees">Shop</a>
+    <a href="about.html">About</a>
+    <a href="contact us.html">Contact</a>
+  </div>
+
+  <div class="icon-section">
+    <div class="icon-container">
+      <a href="login.html"><i class="fa fa-user"></i></a>
+    </div>
+   <div class="cart-icon" id="cart-icon">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-badge" id="cart-count">0</span>
+        </div>
+
+  </div>
+</div>
+  </nav>
+
+  <div class="head">
+    <div class="dropdown">
+      <a href="#">Women Ethnic</a>
+      <div class="dropdown-content">
+        <div class="column">
+          <h4>Sarees</h4>
+          <a href="#silk-sarees">Silk Sarees</a>
+          <a href="#cotton-sarees">Cotton Sarees</a>
+          <a href="#georgette-sarees">Georgette Sarees</a>
+        </div>
+        <div class="column">
+          <h4>Kurtis</h4>
+          <a href="#anarkali-kurtis">Anarkali Kurtis</a>
+          <a href="#rayon-kurtis">Rayon Kurtis</a>
+        </div>
+        <div class="column">
+          <h4>Kurta Sets</h4>
+          <a href="#sharara-sets">Sharara Sets</a>
+          <a href="#palazzo-sets">Palazzo Sets</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <a href="#">Women Western</a>
+      <div class="dropdown-content">
+        <div class="column">
+          <h4>Tops</h4>
+          <a href="#crop-tops">Crop Tops</a>
+          <a href="#t-shirts">T-Shirts</a>
+        </div>
+        <div class="column">
+          <h4>Dresses</h4>
+          <a href="#maxi-dresses">Maxi Dresses</a>
+          <a href="#bodycon-dresses">Bodycon Dresses</a>
+        </div>
+        <div class="column">
+          <h4>Bottom Wear</h4>
+          <a href="#jeans">Jeans</a>
+          <a href="#skirts">Skirts</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <a href="#">Men</a>
+      <div class="dropdown-content">
+        <div class="column">
+          <h4>Top Wear</h4>
+          <a href="t-shirts">T-Shirts</a>
+          <a href="shirts">Shirts</a>
+        </div>
+        <div class="column">
+          <h4>Bottom Wear</h4>
+          <a href="jeans">Jeans</a>
+          <a href="trousers">Trousers</a>
+        </div>
+        <div class="column">
+          <h4>Ethnic</h4>
+          <a href="kurtas">Kurtas</a>
+          <a href="sherwanis">Sherwanis</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <a href="#">Kids</a>
+      <div class="dropdown-content">
+        <div class="column">
+          <h4>Girls</h4>
+          <a href="frocks">Frocks</a>
+          <a href="skirts">Skirts</a>
+        </div>
+        <div class="column">
+          <h4>Boys</h4>
+          <a href="t-shirts">T-Shirts</a>
+          <a href="shirts">Shirts</a>
+        </div>
+        <div class="column">
+          <h4>Baby Care</h4>
+          <a href="diapers">Diapers</a>
+          <a href="toys">Toys</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <a href="#">Home & Kitchen</a>
+      <div class="dropdown-content">
+        <div class="column">
+          <h4>Furnishing</h4>
+          <a href="bedsheets">Bedsheets</a>
+          <a href="curtains">Curtains</a>
+        </div>
+        <div class="column">
+          <h4>Essentials</h4>
+          <a href="cookware">Cookware</a>
+          <a href="storage">Storage</a>
+        </div>
+        <div class="column">
+          <h4>Decor</h4>
+          <a href="wall-arts">Wall Art</a>
+          <a href="lamps">Lamps</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <a href="#">Beauty & Health</a>
+      <div class="dropdown-content">
+        <div class="column">
+          <h4>Makeup</h4>
+          <a href="lipsticks">Lipsticks</a>
+          <a href="foundations">Foundations</a>
+        </div>
+        <div class="column">
+          <h4>Skincare</h4>
+          <a href="moisturizers">Moisturizers</a>
+          <a href="face-wash">Face Wash</a>
+        </div>
+        <div class="column">
+          <h4>Health</h4>
+          <a href="supplements">Supplements</a>
+          <a href="sanitizers">Sanitizers</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <a href="#">Bags & Footwear</a>
+      <div class="dropdown-content">
+        <div class="column">
+          <h4>Bags</h4>
+          <a href="hand-bags">Handbags</a>
+          <a href="back-packs">Backpacks</a>
+        </div>
+        <div class="column">
+          <h4>Footwear</h4>
+          <a href="heels">Heels</a>
+          <a href="sneakers">Sneakers</a>
+        </div>
+        <div class="column">
+          <h4>Men's Bags</h4>
+          <a href="wallets">Wallets</a>
+          <a href="laptop-bags">Laptop Bags</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <a href="#">Electronics</a>
+      <div class="dropdown-content">
+        <div class="column">
+          <h4>Mobiles</h4>
+          <a href="smart-phones">Smartphones</a>
+          <a href="accessories">Accessories</a>
+        </div>
+        <div class="column">
+          <h4>Appliances</h4>
+          <a href="blenders">Blenders</a>
+          <a href="fans">Fans</a>
+        </div>
+        <div class="column">
+          <h4>Computers</h4>
+          <a href="laptops">Laptops</a>
+          <a href="keyboards">Keyboards</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="banner-container">
+    <img src="/images/Advertismentimages/GOWEAR.jpg" alt="snapmart banner">
+    <button id="go">SHOP NOW</button>
+  </div>
+  <button id="but">ALL CATEGORIES</button>
+
+  <!-- Cart Sidebar -->
+  <div class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header">
+      <h2>Shopping Cart</h2>
+      <button class="close-cart" id="close-cart">&times;</button>
+    </div>
+   
+    <div class="cart-items" id="cart-items">
+      <p class="no-items" id="no-items">No items found.</p>
+    </div>
+     <a href="cart.html" class="buy-now-btn" id="checkout-btn" style="color: red;">Proceed to Checkout</a>
+  </div>
+
+
+<!-- WhatsApp Order Button -->
+<div class="whatsapp-float" id="whatsappFloat">
+  <a href="#" id="whatsappOrderLink">
+    <i class="fab fa-whatsapp"></i>
+    <span>Order Now</span>
+  </a>
+</div>
+    <footer class="footer">
+    <div class="top-info">
+      <div>
+        <i class="fa fa-exchange"></i>
+        <strong>EASY EXCHANGE & RETURNS</strong>
+        <p>Raise a request within 2 days of delivery.</p>
+      </div>
+      <div>
+        <i class="fa fa-headphones"></i>
+        <strong>FRIENDLY SUPPORT 24/7</strong>
+        <p>Please get in touch and we are happy to help you.</p>
+      </div>
+      <div>
+        <i class="fa fa-truck"></i>
+        <strong>WITHIN 3–5 DAYS DELIVERY</strong>
+        <p>Safe delivery at your doorstep.</p>
+      </div>
+    </div>
+
+    <div class="footer-main">
+      <div class="footer-col brand">
+        <h2>CURATE</h2>
+        <p>We work towards one goal, making fashion for men more comfortable and stylish without having to empty the consumer’s pocket.</p>
+        <div class="social-icons">
+         <a href="https://www.instagram.com/gowear25/"> <i class="fa fa-instagram"></i></a>
+          <a href="https://www.facebook.com/profile.php?id=61576881070806"><i class="fa fa-facebook"></i></a>
+         <a href=""> <i class="fa fa-youtube"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>INFORMATION</h4>
+        <ul>
+          <a href="about.html"><li>About Us</li></a>
+          <li>Delivery Info</li>
+          <li>Privacy Policy</li>
+          <li>Terms & Cond.</li>
+    <a href="contact us.html"><li>Contact Us</li></a>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>SERVICE</h4>
+        <ul>
+          <li>Product Returns</li>
+          <li>Disclaimer</li>
+          <li>My Account</li>
+          <li>Wishlist</li>
+          <li>Shipping Info</li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>CATEGORIES</h4>
+        <ul>
+          <li>Women Ethnic</li>
+          <li>Shirts</li>
+          <li>Trousers</li>
+          <li>Hoodies</li>
+          <li>Jackets</li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>CONTACT</h4>
+        <p>
+          No20,sairam street senthmail nagar ramapuram Chennai – 600089 <br>
+          <strong>Mobile:</strong> +91 - 9042909734 <br>
+          <strong>Email:</strong> gowear.in@gmail.com
+        </p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+
+      <div class="payment-icons">
+        <img src="/images/payment-icons/paytm.jpg" alt="Paytm">
+        <img src="/images/payment-icons/gpay.jpg" alt="Google Pay">
+        <img src="/images/payment-icons/vsia.png" alt="Visa">
+        <img src="/images/payment-icons/paypal.png" alt="PayPal">
+      </div>
+    </div>
+  </footer>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <!-- Products will be dynamically inserted here by JavaScript -->
+
+  <footer>
+    <p>&copy; 2025 Gowear. All rights reserved.</p>
+  </footer>
+
+
+   <script >
+    
+document.querySelectorAll('.dropdown-content a').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href');
+      const targetSection = document.querySelector(targetId);
+      
+      if (targetSection) {
+        // Calculate offset for fixed header
+        const headerHeight = document.querySelector('nav').offsetHeight;
+        const offset = targetSection.offsetTop - headerHeight - 20;
+
+        // Smooth scroll
+        window.scrollTo({
+          top: offset,
+          behavior: 'smooth'
+        });
+
+        // Add visual feedback
+        targetSection.style.border = '2px solid #f03d4e';
+        setTimeout(() => {
+          targetSection.style.border = 'none';
+        }, 2000);
+      }
+    });
+  });
+
+
+
+    // Product Data
+    const products = {
+      "SILK SAREES": [
+        {
+          id: "silk-1",
+          name: "Silk Saree 1",
+          price: 1299,
+          image: "/images/Silksareeimages/silk saree 1.jpg",
+          rating: "★★★★★ (5.0)"
+        },
+        {
+          id: "silk-2",
+          name: "Silk Saree 2",
+          price: 1100,
+          image: "/images/Silksareeimages/silk saree 2.jpg",
+          rating: "★★★☆☆ (3.0)"
+        },
+        {
+          id: "silk-3",
+          name: "Silk Saree 3",
+          price: 1500,
+          image: "/images/Silksareeimages/silk saree 3.jpg",
+          rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "silk-4",
+          name: "Silk Saree 4",
+          price: 1209,
+          image: "/images/Silksareeimages/silk saree 4.jpg",
+          rating: "★★★½☆ (3.5)"
+        },
+        {
+          id: "silk-5",
+          name: "Silk Saree 5",
+          price: 1900,
+          image: "/images/Silksareeimages/silk saree 5.jpg",
+          rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "silk-6",
+          name: "Silk Saree 6",
+          price: 1199,
+          image: "/images/Silksareeimages/silk saree 6.jpg",
+          rating: "★★★☆☆ (3.0)"
+        },
+        {
+          id: "silk-7",
+          name: "Silk Saree 7",
+          price: 1999,
+          image: "/images/Silksareeimages/silk saree 7.jpg",
+          rating: "★★★★★ (5.0)"
+        },
+        {
+          id: "silk-8",
+          name: "Silk Saree 8",
+          price: 1909,
+          image: "/images/Silksareeimages/silk saree 8.jpg",
+          rating: "★★★★★ (5.0)"
+        },
+        {
+          id: "silk-9",
+          name: "Silk Saree 9",
+          price: 800,
+          image: "/images/Silksareeimages/silk saree 9.jpg",
+          rating: "★★☆☆☆ (2.0)"
+        },
+        {
+          id: "silk-10",
+          name: "Silk Saree 10",
+          price: 1109,
+          image: "/images/Silksareeimages/silk saree 10.jpg",
+          rating: "★★★☆☆ (3.0)"
+        },
+        {
+          id: "silk-11",
+          name: "Silk Saree 11",
+          price: 1109,
+          image: "/images/Silksareeimages/silk saree 11.jpg",
+          rating: "★★★☆☆ (3.0)"
+        },
+        {
+          id: "silk-12",
+          name: "Silk Saree 12",
+          price: 1219,
+          image: "/images/Silksareeimages/silk saree 12.jpg",
+          rating: "★★★★★ (5.0)"
+        }
+      ],
+      "COTTON SAREES": [
+        {
+          id: "cotton-1",
+          name: "Cotton Saree 1",
+          price: 1299,
+          image: "/images/cottonsareesimages/cotton_1.jpg",
+          rating: "★★★★★ (5.0)"
+        },
+        {
+          id: "cotton-2",
+          name: "Cotton Saree 2",
+          price: 1299,
+          image: "/images/cottonsareesimages/cotton_2.jpg",
+          rating: "★★★☆☆ (3.0)"
+        },
+        {
+          id: "cotton-3",
+          name: "Cotton Saree 3",
+          price: 1299,
+          image: "/images/cottonsareesimages/cotton_3.jpg",
+          rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "cotton-4",
+          name: "Cotton Saree 4",
+          price: 1299,
+          image: "/images/cottonsareesimages/cotton_4.jpg",
+          rating: "★★★☆☆ (3.0)"
+        },
+        {
+          id: "cotton-5",
+          name: "Cotton Saree 5",
+          price: 1299,
+          image: "/images/cottonsareesimages/cotton_5.jpg",
+          rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "cotton-6",
+          name: "Cotton Saree 6",
+          price: 1299,
+          image: "/images/cottonsareesimages/cotton_6.jpg",
+          rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "cotton-7",
+          name: "Cotton Saree 7",
+          price: 1299,
+          image: "/images/cottonsareesimages/cotton_7.jpg",
+          rating: "★★★★★ (5.0)"
+        },
+        {
+          id: "cotton-8",
+          name: "Cotton Saree 8",
+          price: 1299,
+          image: "/images/cottonsareesimages/cotton_8.jpg",
+          rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "cotton-9",
+          name: "Cotton Saree 9",
+          price: 1299,
+          image: "/images/cottonsareesimages/cotton_9.jpg",
+          rating: "★★★★★ (5.0)"
+        },
+        {
+          id: "cotton-10",
+          name: "Cotton Saree 10",
+          price: 1299,
+          image: "/images/cottonsareesimages/cotton_10.jpg",
+       rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "cotton-11",
+          name: "Cotton Saree 11",
+          price: 1299,
+          image: "/images/cottonsareesimages/cotton_11.jpg",
+        rating: "★★★★★ (5.0)"
+        },
+        {
+          id: "cotton-12",
+          name: "Cotton Saree 12",
+          price: 1299,
+          image: "/images/cottonsareesimages/cotton_12.jpg",
+         rating: "★★★★☆ (4.0)"
+        }
+      ],
+      "GEORGETTE SAREES": [
+        {
+          id: "georgette-1",
+          name: "Georgette Saree 1",
+          price: 900,
+          image: "/images/georgette sareeimages/Georgette Sarees1.jpg",
+          rating: "★★★☆☆ (3.0)"       
+         },
+        {
+          id: "georgette-2",
+          name: "Georgette Saree 2",
+          price:1000,
+          image: "/images/georgette sareeimages/Georgette Sarees 2.jpg"
+        },
+        {
+          id: "georgette-3",
+          name: "Georgette Saree 3",
+          price: 699,
+          image: "/images/georgette sareeimages/Georgette Sarees 3.jpg",
+          rating: "★★★☆☆ (3.0)" 
+        },
+        {
+          id: "georgette-4",
+          name: "Georgette Saree 4",
+          price: 1109,
+          image: "/images/georgette sareeimages/Georgette Sarees 4.jpg",
+       rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "georgette-5",
+          name: "Georgette Saree 5",
+          price: 777,
+          image: "/images/georgette sareeimages/Georgette Sarees 5.jpg",
+          rating: "★★★☆☆ (3.0)" 
+        },
+        {
+          id: "georgette-6",
+          name: "Georgette Saree 6",
+          price: 799,
+          image: "/images/georgette sareeimages/Georgette Sarees 6.jpg",
+          rating: "★★★☆☆ (3.0)" 
+        },
+        {
+          id: "georgette-7",
+          name: "Georgette Saree 7",
+          price: 779,
+          image: "/images/georgette sareeimages/Georgette Sarees 7.jpg",
+          rating: "★★★☆☆ (3.0)" 
+        },
+        {
+          id: "georgette-8",
+          name: "Georgette Saree 8",
+          price: 899,
+          image: "/images/georgette sareeimages/Georgette Sarees 8.jpg",
+       rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "georgette-9",
+          name: "Georgette Saree 9",
+          price: 797,
+          image: "/images/georgette sareeimages/Georgette Sarees 9.jpg",
+          rating: "★★★☆☆ (3.0)" 
+        },
+        {
+          id: "georgette-10",
+          name: "Georgette Saree 10",
+          price: 1099,
+          image: "/images/georgette sareeimages/Georgette Sarees 10.jpg",
+            rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "georgette-11",
+          name: "Georgette Saree 11",
+          price: 1299,
+          image: "/images/georgette sareeimages/Georgette Sarees 11.jpg",
+          rating: "★★★★★ (5.0)"
+        },
+        {
+          id: "georgette-12",
+          name: "Georgette Saree 12",
+          price: 666,
+          image: "/images/georgette sareeimages/Georgette Sarees 12.jpg",
+          rating: "★★★☆☆ (3.0)" 
+        }
+      ],
+      
+      "Sharara Sets": [
+        {
+          id: "Sharara-1",
+          name: "Sharara Sets 1",
+          price: 1299,
+          image: "/images/Sharara Setsimages/Sharara Sets 1.jpg",
+        rating: "★★★★★ (5.0)"
+        },
+        {
+          id: "Sharara-2",
+          name: "Sharara Sets 2",
+          price: 1499,
+          image: "/images/Sharara Setsimages/Sharara Sets 2.jpg",
+        rating: "★★★★★ (5.0)"
+        },
+        {
+          id: "Sharara-3",
+          name: "Sharara Sets 3",
+          price: 1799,
+          image: "/images/Sharara Setsimages/Sharara Sets 3.jpg",
+          rating: "★★★★★ (5.0)"
+        },
+        {
+          id: "Sharara Sets-4",
+          name: "Sharara Sets 4",
+          price: 1199,
+          image: "/images/Sharara Setsimages/Sharara Sets 4.jpg",
+       rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Sharara-5",
+          name: "Sharara Sets 5",
+          price: 1929,
+          image: "/images/Sharara Setsimages/Sharara Sets 5.jpg",
+        rating: "★★★★★ (5.0)"
+        },
+        {
+          id: "Sharara-6",
+          name: "Sharara Sets 6",
+          price: 1129,
+          image: "/templates/images/Sharara Setsimages/Sharara Sets 6.jpg",
+         rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Sharara-7",
+          name: "Sharara Sets 7",
+          price: 1129,
+          image: "/templates/images/Sharara Setsimages/Sharara Sets 7.jpg",
+          rating: "★★★☆☆ (3.0)" 
+        },
+        {
+          id: "Sharara-8",
+          name: "Sharara Sets 8",
+          price: 1100,
+          image: "/templates/images/Sharara Setsimages/Sharara Sets 8.jpg",
+         rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Sharara-9",
+          name: "Sharara Sets 9",
+          price: 1200,
+          image: "/templates/images/Sharara Setsimages/Sharara Sets 9.jpg",
+        rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Sharara-10",
+          name: "Sharara Sets 10",
+          price: 1200,
+          image: "/templates/images/Sharara Setsimages/Sharara Sets 10.jpg",
+          rating: "★★★☆☆ (3.0)" 
+        },
+        {
+          id: "Sharara-11",
+          name: "Sharara Sets 11",
+          price: 1200,
+          image: "/templates/images/Sharara Setsimages/Sharara Sets 11.jpg",
+          rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Sharara-12",
+          name: "Sharara Sets 12",
+          price: 1200,
+          image: "/templates/images/Sharara Setsimages/Sharara Sets 12.jpg",
+         rating: "★★★★☆ (4.0)"
+        },
+       
+       
+      ],
+      
+      "Palazzo Sets": [
+        {
+          id: "Palazzo-1",
+          name: "Palazzo Sets 1",
+          price: 1299,
+          image: "/templates/images/Palazzo Setsimages/Palazzo Sets 1.jpg",
+         rating: "★★★★★ (5.0)"
+        },
+        {
+          id: "Palazzo-2",
+          name: "Palazzo Sets 2",
+          price: 1499,
+          image: "/templates/images/Palazzo Setsimages/Palazzo Sets 2.jpg",
+         rating: "★★★★★ (5.0)"
+        },
+        {
+          id: "Palazzo-3",
+          name: "Palazzo Sets 3",
+          price: 1099,
+          image: "/templates/images/Palazzo Setsimages/Palazzo Sets 3.jpg",
+          rating: "★★★☆☆ (3.0)" 
+        },
+        {
+          id: "Palazzo-4",
+          name: "Palazzo Sets 4",
+          price: 1499,
+          image: "/templates/Palazzo Setsimages/Palazzo Sets 4.jpg",
+        rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Palazzo-5",
+          name: "Palazzo Sets 5",
+          price: 1199,
+          image: "/templates/Palazzo Setsimages/Palazzo Sets 5.jpg",
+        rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Palazzo-6",
+          name: "Palazzo Sets 6",
+          price: 1099,
+          image: "/templates/Palazzo Setsimages/Palazzo Sets 6.jpg",
+          rating: "★★★☆☆ (3.0)" 
+        },
+        {
+          id: "Palazzo-7",
+          name: "Palazzo Sets 7",
+          price: 1299,
+          image: "/templates/Palazzo Setsimages/Palazzo Sets 7.jpg",
+        rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Palazzo-8",
+          name: "Palazzo Sets 8",
+          price: 1699,
+          image: "/templates/Palazzo Setsimages/Palazzo Sets 8.jpg",
+         rating: "★★★★★ (5.0)"
+        },
+        {
+          id: "Palazzo-9",
+          name: "Palazzo Sets 9",
+          price: 999,
+          image: "/templates/Palazzo Setsimages/Palazzo Sets 9.jpg",
+                rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Palazzo-10",
+          name: "Palazzo Sets 10",
+          price: 1299,
+          image: "/templates/Palazzo Setsimages/Palazzo Sets 10.jpg",
+                rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Palazzo-11",
+          name: "Palazzo Sets 11",
+          price: 609,
+          image: "/templates/Palazzo Setsimages/Palazzo Sets 11.jpg",
+          rating: "★★★☆☆ (3.0)" 
+        },
+        {
+          id: "Palazzo-12",
+          name: "Palazzo Sets 12",
+          price: 509,
+          image: "/templates/Palazzo Setsimages/Palazzo Sets 12.jpg",
+          rating: "★★★☆☆ (3.0)" 
+        },
+       
+       
+      ],
+      "Rayon Kurtis": [
+        {
+          id: "Rayon-1",
+          name: "Rayon Kurtis 1",
+          price: 1299,
+          image: "/templates/Rayon Kurtisimages/Rayon Kurtis 1.jpg",
+              rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Rayon-2",
+          name: "Rayon Kurtis 2",
+          price: 899,
+          image: "/templates/Rayon Kurtisimages/Rayon Kurtis 2.jpg"
+        },
+        {
+          id: "Rayon-3",
+          name: "Rayon Kurtis 3",
+          price: 999,
+          image: "/templates/Rayon Kurtisimages/Rayon Kurtis 3.jpg"
+        },
+        {
+          id: "Rayon-4",
+          name: "Rayon Kurtis 4",
+          price: 777,
+          image: "/templates/Rayon Kurtisimages/Rayon Kurtis 4.jpg",
+          rating: "★★★☆☆ (3.0)"
+        },
+        {
+         
+          id: "Rayon-5",
+          name: "Rayon Kurtis 5",
+          price: 650,
+          image: "/templates/Rayon Kurtisimages/Rayon Kurtis 5.jpg",
+          rating: "★★★☆☆ (3.0)"
+        },
+        {
+          id: "Rayon-6",
+          name: "Rayon Kurtis 6",
+          price:750,
+          image: "/templates/Rayon Kurtisimages/Rayon Kurtis 6.jpg",
+         rating: "★★★☆☆ (3.0)"
+        },
+        {
+          id: "Rayon-7",
+          name: "Rayon Kurtis 7",
+          price: 799,
+          image: "/templates/Rayon Kurtisimages/Rayon Kurtis 7.jpg",
+        rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Rayon-8",
+          name: "Rayon Kurtis 8",
+          price: 599,
+          image: "/templates/Rayon Kurtisimages/Rayon Kurtis 8.jpg",
+         rating: "★★★☆☆ (3.0)"
+        },
+        {
+          id: "Rayon-9",
+          name: "Rayon Kurtis 9",
+          price: 399,
+          image: "/templates/Rayon Kurtisimages/Rayon Kurtis 9.jpg",
+        rating: "★★★☆☆ (3.0)"
+        },
+        {
+          id: "Rayon-10",
+          name: "Rayon Kurtis 10",
+          price: 899,
+          image: "/templates/Rayon Kurtisimages/Rayon Kurtis 10.jpg",
+        rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Rayon-11",
+          name: "Rayon Kurtis 11",
+          price: 959,
+          image: "/templates/Rayon Kurtisimages/Rayon Kurtis 11.jpg",
+        rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Rayon-12",
+          name: "Rayon Kurtis 12",
+          price: 1099,
+          image: "/templates/Rayon Kurtisimages/Rayon Kurtis 12.jpg",
+         rating: "★★★★☆ (4.0)"
+        },
+       
+       
+      ],
+      "Anarkali Kurtis": [
+        {
+          id: "Anarkali-1",
+          name: "Anarkali Kurtis 1",
+          price: 1009,
+          image: "/templates/Anarkali Kurtisimages/Anarkali Kurtis 1.jpg",
+              rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Anarkali-2",
+          name: "Anarkali Kurtis 1",
+          price: 1289,
+          image: "/templates/Anarkali Kurtisimages/Anarkali Kurtis 2.jpg",
+          rating: "★★★★★ (5.0)"
+        } ,
+        {
+          id: "Anarkali-3",
+          name: "Anarkali Kurtis 3",
+          price: 1111,
+          image: "/templates/Anarkali Kurtisimages/Anarkali Kurtis 3.jpg",
+              rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Anarkali-4",
+          name: "Anarkali Kurtis 4",
+          price: 1009,
+          image: "/templates/Anarkali Kurtisimages/Anarkali Kurtis 4.jpg",
+              rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Anarkali-5",
+          name: "Anarkali Kurtis 5",
+          price: 1899,
+          image: "/templates/Anarkali Kurtisimages/Anarkali Kurtis 5.jpg",
+              rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Anarkali-6",
+          name: "Anarkali Kurtis 6",
+          price: 1099,
+          image: "/templates/Anarkali Kurtisimages/Anarkali Kurtis 6.jpg",
+              rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Anarkali-7",
+          name: "Anarkali Kurtis 7",
+          price: 799,
+          image: "/templates/Anarkali Kurtisimages/Anarkali Kurtis 7.jpg",
+          rating: "★★★☆☆ (3.0)"    
+        },
+        {
+          id: "Anarkali-8",
+          name: "Anarkali Kurtis 8",
+          price: 889,
+          image: "/templates/Anarkali Kurtisimages/Anarkali Kurtis 8.jpg",
+              rating: "★★★☆☆ (3.0)"
+        },
+        {
+          id: "Anarkali-9",
+          name: "Anarkali Kurtis 9",
+          price: 999,
+          image: "/templates/Anarkali Kurtisimages/Anarkali Kurtis 9.jpg",
+              rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Anarkali-10",
+          name: "Anarkali Kurtis 10",
+          price: 1199,
+          image: "/templates/Anarkali Kurtisimages/Anarkali Kurtis 10.jpg",
+              rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Anarkali-11",
+          name: "Anarkali Kurtis 11",
+          price: 1699,
+          image: "/templates/Anarkali Kurtisimages/Anarkali Kurtis 11.jpg",
+              rating: "★★★★☆ (4.0)"
+        },
+        {
+          id: "Anarkali-12",
+          name: "Anarkali Kurtis 12",
+          price: 1099,
+          image: "/templates/Anarkali Kurtisimages/Anarkali Kurtis 12.jpg",
+               rating: "★★★☆☆ (3.0)"
+        },
+       
+       
+      ],
+
+    };
+
+    // Cart Management
+    let cartItems = [];
+
+    // DOM Elements
+    const cartIcon = document.getElementById('cart-icon');
+    const cartSidebar = document.getElementById('cart-sidebar');
+    const closeCartBtn = document.getElementById('close-cart');
+    const cartItemsContainer = document.getElementById('cart-items');
+    const noItemsMsg = document.getElementById('no-items');
+    const cartCount = document.getElementById('cart-count');
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      renderProducts();
+      setupEventListeners();
+    });
+
+    // Render all products
+    function renderProducts() {
+      Object.entries(products).forEach(([category, items]) => {
+        const section = document.createElement('section');
+        section.innerHTML = `
+          <div class="section-title">
+            <h3 id="pro">${category}</h3>
+          </div>
+          <div class="product-row" id="${category.toLowerCase().replace(/\s+/g, '-')}"></div>
+        `;
+        document.body.insertBefore(section, document.querySelector('footer'));
+        
+        const container = document.getElementById(category.toLowerCase().replace(/\s+/g, '-'));
+        items.forEach(product => {
+          const card = document.createElement('div');
+          card.className = 'product-card';
+          card.innerHTML = `
+            <img src="${product.image}" alt="${product.name}" loading="lazy">
+            ${product.rating ? `<div class="rating">${product.rating}</div>` : ''}
+            <p>₹${product.price}</p>
+            <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
+          `;
+          container.appendChild(card);
+        });
+      });
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+      // Cart toggle
+      cartIcon.addEventListener('click', toggleCart);
+      closeCartBtn.addEventListener('click', toggleCart);
+      
+      // Event delegation for add to cart buttons
+      document.addEventListener('click', function(e) {
+        // Add to cart
+        if (e.target.classList.contains('add-to-cart')) {
+          const productId = e.target.dataset.id;
+          const product = Object.values(products)
+            .flat()
+            .find(p => p.id === productId);
+          if (product) addToCart(product);
+        }
+        
+        // Cart quantity controls
+        if (e.target.classList.contains('increase')) {
+          const productId = e.target.dataset.id;
+          const item = cartItems.find(item => item.id === productId);
+          if (item) {
+            item.quantity++;
+            updateCartDisplay();
+          }
+        }
+        
+        if (e.target.classList.contains('decrease')) {
+          const productId = e.target.dataset.id;
+          const itemIndex = cartItems.findIndex(item => item.id === productId);
+          if (itemIndex !== -1) {
+            if (cartItems[itemIndex].quantity > 1) {
+              cartItems[itemIndex].quantity--;
+            } else {
+              cartItems.splice(itemIndex, 1);
+            }
+            updateCartDisplay();
+          }
+        }
+      });
+
+      // Search functionality
+      document.querySelector('.search-bar').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const query = this.querySelector('input').value.trim();
+        if (query) {
+          alert(`Search feature coming soon. You searched for: "${query}"`);
+        }
+      });
+
+      // Dropdown hover effects
+      let dropdownTimer;
+      document.querySelectorAll('.dropdown').forEach(dropdown => {
+        const content = dropdown.querySelector('.dropdown-content');
+        dropdown.addEventListener('mouseenter', () => {
+          clearTimeout(dropdownTimer);
+          content.style.opacity = '1';
+          content.style.visibility = 'visible';
+          content.style.transform = 'translateY(0)';
+          content.style.pointerEvents = 'auto';
+        });
+        dropdown.addEventListener('mouseleave', () => {
+          dropdownTimer = setTimeout(() => {
+            content.style.opacity = '0';
+            content.style.visibility = 'hidden';
+            content.style.transform = 'translateY(10px)';
+            content.style.pointerEvents = 'none';
+          }, 300);
+        });
+      });
+    }
+
+    // Cart functions
+    function toggleCart() {
+      cartSidebar.classList.toggle('active');
+    }
+
+    function addToCart(product) {
+      const existingItem = cartItems.find(item => item.id === product.id);
+      if (existingItem) {
+        
+        existingItem.quantity++;
+      } else {
+        cartItems.push({...product, quantity: 1});
+      }
+      updateCartDisplay();
+    }
+
+    function updateCartDisplay() {
+      cartItemsContainer.innerHTML = '';
+      
+      if (cartItems.length === 0) {
+        noItemsMsg.style.display = 'block';
+        cartCount.textContent = '0';
+        return;
+      }
+      
+      noItemsMsg.style.display = 'none';
+      
+      cartItems.forEach(item => {
+        const itemElement = document.createElement('div');
+        itemElement.className = 'cart-item';
+        itemElement.innerHTML = `
+          <img src="${item.image}" alt="${item.name}">
+          <div class="item-details">
+            <p class="item-name">${item.name}</p>
+             <p class="item-rating">${item.rating}</p>
+            <p class="item-price">₹${item.price}</p>
+            <div class="quantity-control">
+              <button class="decrease" data-id="${item.id}">-</button>
+              <input type="text" value="${item.quantity}" readonly>
+              <button class="increase" data-id="${item.id}">+</button>
+            </div>
+          </div>
+        `;
+        cartItemsContainer.appendChild(itemElement);
+      });
+      
+      cartCount.textContent = cartItems.reduce((total, item) => total + item.quantity, 0);
+    }
+function updateCartDisplay() {
+  cartItemsContainer.innerHTML = '';
+  let total = 0; // Add total calculation
+
+  if (cartItems.length === 0) {
+    noItemsMsg.style.display = 'block';
+    cartCount.textContent = '0';
+    return;
+  }
+
+  noItemsMsg.style.display = 'none';
+
+  cartItems.forEach(item => {
+    total += item.price * item.quantity; // Calculate total
+    const itemElement = document.createElement('div');
+    itemElement.className = 'cart-item';
+    itemElement.innerHTML = `
+      <img src="${item.image}" alt="${item.name}">
+      <div class="item-details">
+        <p class="item-name">${item.name}</p>
+        ${item.rating ? `<p class="item-rating">${item.rating}</p>` : ''}
+        <p class="item-price">₹${item.price}</p>
+        <div class="quantity-control">
+          <button class="decrease" data-id="${item.id}">-</button>
+          <input type="text" value="${item.quantity}" readonly>
+          <button class="increase" data-id="${item.id}">+</button>
+        </div>
+      </div>
+    `;
+    cartItemsContainer.appendChild(itemElement);
+  });
+
+  // Add total display
+  const totalElement = document.createElement('div');
+  totalElement.className = 'cart-total';
+  totalElement.innerHTML = `
+    <div style="padding: 15px; border-top: 2px solid #444; margin-top: 20px;">
+      <h3>Total: ₹${total.toFixed(2)}</h3>
+    </div>
+  `;
+  cartItemsContainer.appendChild(totalElement);
+
+  cartCount.textContent = cartItems.reduce((total, item) => total + item.quantity, 0);
+}
+    
+    updateCartDisplay();
+    
+  
+    
+
+    // GST Configuration
+    const GST_RATE = 0.05; // 5% GST
+
+    // Modified updateCartDisplay function
+    function updateCartDisplay() {
+      cartItemsContainer.innerHTML = '';
+      let subtotal = 0;
+
+      if (cartItems.length === 0) {
+        noItemsMsg.style.display = 'block';
+        cartCount.textContent = '0';
+        return;
+      }
+
+      noItemsMsg.style.display = 'none';
+
+      // Render cart items
+      cartItems.forEach(item => {
+        subtotal += item.price * item.quantity;
+        const itemElement = document.createElement('div');
+        itemElement.className = 'cart-item';
+        itemElement.innerHTML = `
+          <img src="${item.image}" alt="${item.name}">
+          <div class="item-details">
+            <p class="item-name">${item.name}</p>
+            ${item.rating ? `<p class="item-rating">${item.rating}</p>` : ''}
+            <p class="item-price">₹${item.price.toFixed(2)}</p>
+            <div class="quantity-control">
+              <button class="decrease" data-id="${item.id}">-</button>
+              <input type="text" value="${item.quantity}" readonly>
+              <button class="increase" data-id="${item.id}">+</button>
+            </div>
+          </div>
+        `;
+        cartItemsContainer.appendChild(itemElement);
+      });
+
+      // Calculate GST and totals
+      const gst = subtotal * GST_RATE;
+      const total = subtotal + gst;
+
+      // Create summary HTML
+      const summaryHTML = `
+        <div class="cart-summary">
+          <div class="summary-row">
+            <span>Subtotal:</span>
+            <span>₹${subtotal.toFixed(2)}</span>
+          </div>
+          <div class="summary-row">
+            <span>GST (${(GST_RATE * 100)}%):</span>
+            <span>₹${gst.toFixed(2)}</span>
+          </div>
+          <div class="summary-row total-row">
+            <span>Total:</span>
+            <span class="total-amount">₹${total.toFixed(2)}</span>
+          </div>
+        </div>
+      `;
+
+      // Append summary to cart
+      cartItemsContainer.insertAdjacentHTML('beforeend', summaryHTML);
+      cartCount.textContent = cartItems.reduce((total, item) => total + item.quantity, 0);
+    }
+
+    // Keep all other functions same as before
+
+
+
+    let isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+  // Update login status display
+  function updateAuthStatus() {
+    const loginText = document.getElementById('login-text');
+    if(isLoggedIn) {
+      loginText.textContent = 'Account';
+    } else {
+      loginText.textContent = 'Login/Signup';
+    }
+  }
+
+  function toggleMenu() {
+    document.getElementById("mobileMenu").classList.toggle("active");
+  }
+
+  function toggleCart() {
+    document.querySelector('.cart-sidebar').classList.toggle('active');
+  }
+
+  // Modified Add to Cart functionality
+  // document.addEventListener('click', function(e) {
+    // if (e.target.classList.contains('add-to-cart')) {
+    //   if(!isLoggedIn) {
+    //     e.preventDefault();
+    //     const returnUrl = encodeURIComponent(window.location.href);
+    //     window.location.href = `/Loginpage/Login.html?return=${returnUrl}`;
+    //     return;
+    //   }
+      
+    //   // Existing add to cart logic
+    //   const productId = e.target.dataset.id;
+    //   const product = getProductById(productId);
+    //   addToCart(product);
+    // }
+  // });
+  // WhatsApp Order Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize WhatsApp button only if not on cart/checkout pages
+  if (!document.body.classList.contains('cart-page') && 
+      !document.body.classList.contains('checkout-page')) {
+    
+    const whatsappFloat = document.getElementById('whatsappFloat');
+    const whatsappOrderLink = document.getElementById('whatsappOrderLink');
+    
+    // REPLACE WITH YOUR WHATSAPP NUMBER (with country code)
+    const whatsappNumber = '9042909734';
+    
+    function generateWhatsAppMessage() {
+      let message = "Hello GOWEAR,\nI want to place an order for:\n\n";
+      
+      // Check if cart has items
+      const cartItems = document.querySelectorAll('.cart-item');
+      if (cartItems.length > 0) {
+        cartItems.forEach(item => {
+          const name = item.querySelector('.cart-item-name')?.textContent || 'Product';
+          const price = item.querySelector('.cart-item-price')?.textContent || '0';
+          const quantity = item.querySelector('.cart-item-quantity')?.textContent || '1';
+          message += `- ${name} (Qty: ${quantity}) - ${price}\n`;
+        });
+        message += "\nPlease confirm availability and payment options.";
+      } else {
+        message = "Hello GOWEAR, I'm interested in your products. Please share details.";
+      }
+      return encodeURIComponent(message);
+    }
+    
+    whatsappOrderLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      const message = generateWhatsAppMessage();
+      window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+    });
+
+    // Show button after initialization
+    whatsappFloat.style.display = 'flex';
+    
+    // Scroll behavior
+    let lastScroll = 0;
+    window.addEventListener('scroll', function() {
+      const currentScroll = window.pageYOffset;
+      whatsappFloat.style.transform = currentScroll > lastScroll ? 
+        'translateY(100px)' : 'translateY(0)';
+      lastScroll = currentScroll;
+    });
+  }
+});
+    </script>
+</body>
+
+
+</html>
